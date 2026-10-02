@@ -1,0 +1,31 @@
+{
+  "name": "whatsapp-ai-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp bot serbaguna: stiker, Word ke PDF, dan AI Gemini",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "docx-pdf": "^0.0.1",
+    "dotenv": "^16.4.5",
+    "file-type": "^16.5.4",
+    "fs-extra": "^11.2.0",
+    "mime-types": "^2.1.35",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "sharp": "^0.33.5",
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#main"
+  },
+  "allowScripts": {
+    "puppeteer": true,
+    "sharp": true,
+    "phantomjs-prebuilt": false
+  }
+}
