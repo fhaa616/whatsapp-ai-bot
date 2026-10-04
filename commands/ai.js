@@ -29,13 +29,14 @@ async function generateWithRetry(aiModel, prompt, tries = 3) {
       const status = err?.status ?? err?.response?.status;
       const retryable = status === 503 || status === 500;
       if (!retryable || i === tries - 1) throw err;
-      await sleep(2000 * (i + 1)); // tunggu 2 detik, lalu 4 detik
+      await sleep(1000 * (i + 1)); // tunggu 1 detik, lalu 2 detik
     }
   }
 }
 
 export default {
   name: "ai",
+  aliases: ["tanya"],
   description: "Tanya jawab dengan AI (Gemini)",
 
   async execute(client, message, args) {
@@ -53,15 +54,16 @@ export default {
     }
 
     try {
-      // Indikator mengetik bersifat opsional: kalau gagal, lanjutkan saja
-      try {
-        const chat = await message.getChat();
-        await chat.sendStateTyping();
-      } catch {
-        // abaikan
-      }
+      // Jangan tunggu: indikator mengetik tidak boleh menunda jawaban
+      message
+        .getChat()
+        .then((c) => c.sendStateTyping())
+        .catch(() => {});
 
+      const t0 = Date.now();
       const result = await generateWithRetry(aiModel, prompt);
+      console.log(`[ai] Gemini menjawab dalam ${Date.now() - t0} ms`);
+
       const answer = result.response.text()?.trim();
 
       if (!answer) {
@@ -105,12 +107,10 @@ export default {
 
       await message.reply("❌ Gagal menghubungi AI. Coba lagi nanti.");
     } finally {
-      try {
-        const chat = await message.getChat();
-        await chat.clearState();
-      } catch {
-        // abaikan
-      }
+      message
+        .getChat()
+        .then((c) => c.clearState())
+        .catch(() => {});
     }
   },
 };

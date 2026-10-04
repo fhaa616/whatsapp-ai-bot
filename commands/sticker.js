@@ -1,8 +1,9 @@
-import sharp from 'sharp';
-import pkg from 'whatsapp-web.js';
+import sharp from "sharp";
+import pkg from "whatsapp-web.js";
 
 const { MessageMedia } = pkg;
 
+// Ambil pesan yang memuat media: pesan itu sendiri atau pesan yang di-reply
 async function getMediaMessage(message) {
   if (message.hasMedia) return message;
   if (message.hasQuotedMsg) {
@@ -15,42 +16,51 @@ async function getMediaMessage(message) {
 // Ubah gambar menjadi WebP 512x512, latar transparan
 async function toStickerWebp(buffer) {
   return sharp(buffer)
-    .resize(512, 512, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .resize(512, 512, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
     .webp({ quality: 70 })
     .toBuffer();
 }
 
 export default {
-  name: 'stiker',
-  description: 'Ubah gambar menjadi stiker',
+  name: "stiker",
+  aliases: ["sticker", "s"],
+  description: "Ubah gambar menjadi stiker",
 
   async execute(client, message) {
     try {
       const target = await getMediaMessage(message);
       if (!target) {
         return message.reply(
-          `🖼️ Kirim gambar dengan caption *${client.prefix}stiker*, atau reply gambar dengan perintah itu.`
+          `🖼️ Kirim gambar dengan caption *${client.prefix}stiker*, atau reply gambar dengan perintah itu.`,
         );
       }
 
       const media = await target.downloadMedia();
-      if (!media || !media.mimetype?.startsWith('image/')) {
-        return message.reply('⚠️ Media harus berupa *gambar* (JPG/PNG/WebP).');
+      if (!media || !media.mimetype?.startsWith("image/")) {
+        return message.reply("⚠️ Media harus berupa *gambar* (JPG/PNG/WebP).");
       }
 
-      await message.reply('⏳ Sedang membuat stiker...');
+      await message.reply("⏳ Sedang membuat stiker...");
 
-      const webpBuffer = await toStickerWebp(Buffer.from(media.data, 'base64'));
-      const stickerMedia = new MessageMedia('image/webp', webpBuffer.toString('base64'));
+      const webpBuffer = await toStickerWebp(Buffer.from(media.data, "base64"));
+      const stickerMedia = new MessageMedia(
+        "image/webp",
+        webpBuffer.toString("base64"),
+      );
 
       await client.sendMessage(message.from, stickerMedia, {
         sendMediaAsSticker: true,
-        stickerName: 'WhatsApp AI Bot',
-        stickerAuthor: 'Bot',
+        stickerName: "WhatsApp AI Bot",
+        stickerAuthor: "Bot",
       });
     } catch (err) {
-      console.error('[stiker] Error:', err);
-      await message.reply('❌ Gagal membuat stiker. Pastikan gambarnya valid, lalu coba lagi.');
+      console.error("[stiker] Error:", err);
+      await message.reply(
+        "❌ Gagal membuat stiker. Pastikan gambarnya valid, lalu coba lagi.",
+      );
     }
   },
 };

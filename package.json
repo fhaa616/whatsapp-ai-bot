@@ -13,11 +13,12 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
-    "docx-pdf": "^0.0.1",
     "dotenv": "^16.4.5",
     "file-type": "^16.5.4",
     "fs-extra": "^11.2.0",
+    "mammoth": "^1.13.0",
     "mime-types": "^2.1.35",
+    "puppeteer-core": "^25.12.0",
     "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "sharp": "^0.33.5",
