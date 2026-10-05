@@ -1,6 +1,6 @@
 # WhatsApp AI Bot
 
-Bot WhatsApp berbasis Node.js yang memakai [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) dan Google Gemini. Dibuat untuk membantu kegiatan kuliah, dengan struktur command yang modular sehingga fitur baru cukup ditambah satu file.
+Bot WhatsApp berbasis Node.js yang memakai [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) dan Google Gemini. Dibuat untuk membantu kegabutan, dengan struktur command yang modular sehingga fitur baru cukup ditambah satu file.
 
 ## Fitur
 
